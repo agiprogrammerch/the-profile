@@ -35,6 +35,7 @@ export default function StarsCanvas() {
   const frameRef = useRef(0);
   const WRef = useRef(0);
   const HRef = useRef(0);
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,8 +48,10 @@ export default function StarsCanvas() {
       if (document.hidden) {
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
         }
-      } else {
+      } else if (!animationRef.current) {
+        // Only restart if not already running
         drawFrame();
       }
     };
@@ -139,6 +142,7 @@ export default function StarsCanvas() {
 
       rotationRef.current = 0;
       frameRef.current = 0;
+      isInitializedRef.current = true;
     };
 
     const drawFrame = () => {
@@ -194,6 +198,8 @@ export default function StarsCanvas() {
         twinkleOffset: Math.random() * Math.PI * 2,
       }));
       shootersRef.current = Array.from({ length: 10 }, () => createShootingStar(true));
+      rotationRef.current = 0;
+      frameRef.current = 0;
     });
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -202,8 +208,11 @@ export default function StarsCanvas() {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handleMotionChange = (e: MediaQueryListEvent) => {
       if (e.matches) {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      } else {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
+        }
+      } else if (!animationRef.current) {
         drawFrame();
       }
     };
@@ -213,7 +222,10 @@ export default function StarsCanvas() {
       window.removeEventListener('resize', init);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       mediaQuery.removeEventListener?.('change', handleMotionChange);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = undefined;
+      }
     };
   }, []);
 

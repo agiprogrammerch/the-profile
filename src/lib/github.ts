@@ -19,17 +19,17 @@ export interface RepoStats {
   url: string;
 }
 
-const GITHUB_USERNAME = 'agiprogrammer';
+const GITHUB_USERNAME = 'agiprogrammerch';
 const GITHUB_API_BASE = 'https://api.github.com';
 
 // Static fallback data for when API is unavailable or rate limited
 const staticFallbacks: Record<string, RepoStats> = {
-  echobaud: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/echobaud' },
-  phaseveil: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/phaseveil' },
-  'osint-center': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/osint-center' },
-  tensorgate: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/tensorgate' },
-  'cyber-virtual-mouse': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/cyber-virtual-mouse' },
-  'lan-drop': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: 'https://github.com/agiprogrammer/lan-drop' },
+  echobaud: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/echobaud` },
+  phaseveil: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/phaseveil` },
+  'osint-center': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/osint-center` },
+  tensorgate: { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/tensorgate` },
+  'cyber-virtual-mouse': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/cyber-virtual-mouse` },
+  'lan-drop': { stars: 0, language: 'Python', lastUpdated: '2025-01-15', url: `https://github.com/${GITHUB_USERNAME}/lan-drop` },
 };
 
 async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout = 5000): Promise<Response> {

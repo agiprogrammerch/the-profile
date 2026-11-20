@@ -1,10 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function About() {
   const hexStreamRef = useRef<HTMLSpanElement>(null);
-  const [hardwareStats, setHardwareStats] = useState<Record<string, string>>({});
+
+  // Hardware stats - render immediately on both SSR and client
+  const hardwareStats = {
+    cpu: 'i3-1115G4',
+    ram: '8GB DDR4',
+    gpu: 'iGPU 128MB',
+    thermal: '<40°C',
+  };
 
   useEffect(() => {
     // Animate hex stream
@@ -18,16 +25,6 @@ export default function About() {
     }, 800);
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // Simulate hardware stats fetching (in real scenario, this could be from a benchmark)
-    setHardwareStats({
-      cpu: 'i3-1115G4',
-      ram: '8GB DDR4',
-      gpu: 'iGPU 128MB',
-      thermal: '<40°C',
-    });
   }, []);
 
   return (

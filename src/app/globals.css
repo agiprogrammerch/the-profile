@@ -236,6 +236,12 @@ nav {
   animation: pulse-dot 1.8s infinite;
 }
 
+/* Scrolled navbar state */
+nav.scrolled {
+  background: rgba(2,11,2,0.95);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
 .hamburger {
   display: none;
   flex-direction: column;
@@ -252,6 +258,19 @@ nav {
   height: 2px;
   background: var(--green);
   transition: all 0.3s;
+}
+
+/* Hamburger animation */
+.hamburger span:nth-child(1).open {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger span:nth-child(2).open {
+  opacity: 0;
+}
+
+.hamburger span:nth-child(3).open {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 .mobile-menu {
@@ -272,7 +291,8 @@ nav {
   display: flex;
 }
 
-.mobile-menu a {
+.mobile-menu a,
+.mobile-link {
   color: var(--text-dim);
   text-decoration: none;
   font-size: 0.9rem;
@@ -280,7 +300,8 @@ nav {
   transition: color 0.2s;
 }
 
-.mobile-menu a:hover {
+.mobile-menu a:hover,
+.mobile-link:hover {
   color: var(--green);
 }
 
@@ -1119,6 +1140,75 @@ footer {
 @keyframes fadeInRight {
   from { opacity: 0; transform: translateX(30px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,65,0.6); }
+  50% { box-shadow: 0 0 0 6px rgba(0,255,65,0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 8px; }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  #matrix-canvas,
+  #stars-canvas {
+    display: none !important;
+  }
+
+  body::before {
+    animation: none !important;
+  }
+
+  .skill-card,
+  .project-card,
+  .hero-badge,
+  .hero-title,
+  .hero-role,
+  .hero-desc,
+  .hero-cta,
+  .hero-terminal {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .counter-ping,
+  .status-dot,
+  .lock-icon,
+  .lock-stream span,
+  .t-cursor,
+  .sandbox-cursor {
+    animation: none !important;
+  }
 }
 
 /* Responsive */

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+const GITHUB_USERNAME = 'agiprogrammerch';
 const EMAIL = 'agiprogrammer@gmail.com';
 
 export default function Footer() {
@@ -67,18 +68,8 @@ export default function Footer() {
           <h4>PROFILES</h4>
           <ul>
             <li>
-              <a href="https://github.com/agiprogrammer" target="_blank" rel="noopener noreferrer">
+              <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer">
                 GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">
-                TryHackMe
-              </a>
-            </li>
-            <li>
-              <a href="https://hackthebox.com" target="_blank" rel="noopener noreferrer">
-                HackTheBox
               </a>
             </li>
           </ul>

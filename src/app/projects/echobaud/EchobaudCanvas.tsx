@@ -103,15 +103,29 @@ export default function EchobaudCanvas() {
       window.removeEventListener('echobaud-modulate', handleModulate as EventListener);
       window.removeEventListener('echobaud-spectrogram', handleSpectrogram as EventListener);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      if (audioContextRef.current) audioContextRef.current.close();
+      // Clean up audio resources
+      if (analyserRef.current) {
+        analyserRef.current.disconnect();
+        analyserRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
     };
   }, []);
 
   const playToneSequence = async (text: string, mode: 'audible' | 'ultrasonic') => {
     try {
-      if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Clean up previous audio context if exists
+      if (audioContextRef.current) {
+        if (analyserRef.current) {
+          analyserRef.current.disconnect();
+        }
+        audioContextRef.current.close();
       }
+
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
 
       const audioContext = audioContextRef.current;
       if (audioContext.state === 'suspended') {

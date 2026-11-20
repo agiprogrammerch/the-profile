@@ -64,29 +64,37 @@ export default function Cursor() {
   useEffect(() => {
     if (!isFinePointer) return;
 
-    const handleMouseEnter = (e: Event) => {
+    const interactiveSelector = 'a, button, .skill-card, .project-card, .quick-command, .stat-box, .lock-visual, .terminal-window, .sandbox-terminal, input, textarea, select';
+
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.matches('a, button, .skill-card, .project-card, .quick-command, .stat-box, .lock-visual, .terminal-window, .sandbox-terminal')) {
-        if (ringRef.current) {
-          ringRef.current.style.transform = 'translate(-50%, -50%) scale(1.6)';
-          ringRef.current.style.borderColor = 'rgba(0,255,65,0.8)';
+      const interactive = target.closest(interactiveSelector);
+      if (interactive && ringRef.current) {
+        ringRef.current.style.transform = 'translate(-50%, -50%) scale(1.6)';
+        ringRef.current.style.borderColor = 'rgba(0,255,65,0.8)';
+      }
+    };
+
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const interactive = target.closest(interactiveSelector);
+      // Only reset if we're actually leaving an interactive element
+      if (interactive && ringRef.current) {
+        // Check if the related target is also inside an interactive element
+        const relatedTarget = e.relatedTarget as HTMLElement;
+        if (!relatedTarget || !relatedTarget.closest(interactiveSelector)) {
+          ringRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+          ringRef.current.style.borderColor = 'rgba(0,255,65,0.5)';
         }
       }
     };
 
-    const handleMouseLeave = () => {
-      if (ringRef.current) {
-        ringRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
-        ringRef.current.style.borderColor = 'rgba(0,255,65,0.5)';
-      }
-    };
-
-    document.addEventListener('mouseenter', handleMouseEnter, true);
-    document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
 
     return () => {
-      document.removeEventListener('mouseenter', handleMouseEnter, true);
-      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
     };
   }, [isFinePointer]);
 

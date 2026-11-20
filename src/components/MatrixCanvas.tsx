@@ -8,6 +8,7 @@ export default function MatrixCanvas() {
   const dropsRef = useRef<number[]>([]);
   const colsRef = useRef(0);
   const charSet = 'ARUSH010xFFΩΨ∇△◇EB905056';
+  const isRunningRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -20,8 +21,10 @@ export default function MatrixCanvas() {
       if (document.hidden) {
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
+          isRunningRef.current = false;
         }
-      } else {
+      } else if (!isRunningRef.current) {
         animate();
       }
     };
@@ -55,22 +58,31 @@ export default function MatrixCanvas() {
     };
 
     const animate = () => {
+      if (!isRunningRef.current) return;
       draw();
       animationRef.current = requestAnimationFrame(animate);
     };
 
     init();
     animate();
+    isRunningRef.current = true;
 
-    window.addEventListener('resize', init);
+    window.addEventListener('resize', () => {
+      init();
+    });
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Respect prefers-reduced-motion
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handleMotionChange = (e: MediaQueryListEvent) => {
       if (e.matches) {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      } else {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
+          isRunningRef.current = false;
+        }
+      } else if (!isRunningRef.current) {
         animate();
       }
     };
@@ -80,7 +92,11 @@ export default function MatrixCanvas() {
       window.removeEventListener('resize', init);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       mediaQuery.removeEventListener?.('change', handleMotionChange);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = undefined;
+        isRunningRef.current = false;
+      }
     };
   }, []);
 

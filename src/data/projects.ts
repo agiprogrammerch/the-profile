@@ -192,7 +192,7 @@ export const projects: Project[] = [
     title: 'ECHOBAUD',
     subtitle: 'Air-Gapped Acoustic Modem for Encrypted Transfer',
     status: 'Production Ready • v1.2.0',
-    description: 'Zero Wi-Fi, Bluetooth, internet, or cables. Pure Python 3.10+, deterministic DSP, production-grade acoustic communication via speakers and microphone.',
+    description: 'Air-gapped acoustic modem transmitting AES-256-GCM encrypted text and files over sound waves — zero Wi-Fi, Bluetooth, internet, or cables.',
     longDescription: `EchoBaud is an air-gapped acoustic modem for encrypted text and file transfer via speakers and microphone. It requires zero network infrastructure — no Wi-Fi, Bluetooth, internet, or cables. Built with pure Python 3.10+, it implements deterministic digital signal processing with production-grade reliability.
 
 The signal pipeline consists of:
@@ -210,7 +210,7 @@ Two operating profiles:
 Benchmarked at SNR from +20 dB to -5 dB with 100% FEC recovery in audible mode. Peak RAM: < 42 MB. Effective throughput: ~4.9 bps.`,
     tags: ['PYTHON', 'DSP', '4-FSK', 'AES-256-GCM', 'REED-SOLOMON', 'AIR-GAPPED'],
     icon: '📻',
-    githubUrl: 'https://github.com/agiprogrammer/echobaud',
+    githubUrl: 'https://github.com/agiprogrammerch/echobaud',
     isFlagship: true,
     architecture: echobaudArchitecture,
     specifications: {
@@ -286,7 +286,7 @@ echobaud benchmark [--mode audible|ultrasonic]`,
     title: 'PHASEVEIL',
     subtitle: 'Covert-Channel Steganography & Steganalysis Engine',
     status: 'Production Ready • v1.0.0',
-    description: 'Research-grade deterministic Python engine for hiding AES-256-GCM encrypted payloads in phase spectrum of 16-bit PCM WAV files and network inter-packet delays (IPD), with mathematical detection via zero-ML statistics.',
+    description: 'Research-grade deterministic Python engine for hiding AES-256-GCM encrypted payloads in the phase spectrum of 16-bit PCM WAV files and network inter-packet delays (IPD), with mathematical detection via zero-ML statistics.',
     longDescription: `PhaseVeil is a research-grade, fully deterministic Python engine for three core capabilities:
 
 1. **Audio Phase Spectrum Steganography**: Hiding AES-256-GCM encrypted payloads in the phase spectrum of 16-bit PCM .wav files using classic phase coding (no LSB byte tricks). Uses 8-PSK constellation on selected mid-band bins (1000–6000 Hz) with delta-preserving followers across K=4 segments per chunk. Achieves SNR 33–35 dB, PSNR 44–46 dB at ~180 B/s.
@@ -298,7 +298,7 @@ echobaud benchmark [--mode audible|ultrasonic]`,
 All transforms are pure, local, deterministic mathematics. No AI/ML models, no telemetry, no cloud APIs, no phone-home. Network channel restricted to 127.0.0.1 loopback by default.`,
     tags: ['PYTHON', 'STEGANOGRAPHY', 'PHASE-CODING', 'AES-256-GCM', 'IPD', 'STEGANALYSIS'],
     icon: '🔐',
-    githubUrl: 'https://github.com/agiprogrammer/phaseveil',
+    githubUrl: 'https://github.com/agiprogrammerch/phaseveil',
     isFlagship: true,
     architecture: phaseveilArchitecture,
     specifications: {
@@ -372,7 +372,7 @@ phaseveil benchmark [--json bench.json]`,
 **Architecture**: Native ES modules (type="module") served via Python serve.py which provides /proxy endpoint (GET/POST, any http(s) URL, follows redirects, forwards headers) and rewrites HLS playlists for camera playback. Bundled libraries (Leaflet, markercluster, satellite.js, hls.js) in js/vendor/ with CDN fallback. Offline Istanbul map downloader (free, resumable, 39,706 tiles, 277 MB, z0–z19). Free-tier etiquette configured: OpenSky 5 min refresh (288/day), others 2.5–30 min.`,
     tags: ['PYTHON', 'JAVASCRIPT', 'OSINT', 'LEAFLET', 'HLS.JS', 'SATELLITE.JS', 'PUBLIC-APIS'],
     icon: '🛰️',
-    githubUrl: 'https://github.com/agiprogrammer/osint-center',
+    githubUrl: 'https://github.com/agiprogrammerch/osint-center',
     isFlagship: true,
     architecture: osintCenterArchitecture,
     specifications: {
@@ -403,7 +403,7 @@ python3 serve.py            # then open http://127.0.0.1:8000
 python3 serve.py --port 8080  # optional custom port
 
 # Login (themed client-side gate)
-# Username: agiprogrammer
+# Username: agiprogrammerch
 # Password: Hacker@11
 
 # Download offline Istanbul map
@@ -456,7 +456,7 @@ python3 download_istanbul_map.py --bbox 51.4,-0.15,51.6,0.05 --zoom 8-14 -l lond
 **Disclaimer**: Explicitly scoped for defensive monitoring, digital forensics, and authorized lab validation only.`,
     tags: ['PYTHON', 'STATIC-ANALYSIS', 'WIPS', '802.11', 'FORENSICS', 'NTFY', 'TELEGRAM', 'ZERO-AI'],
     icon: '🛡️',
-    githubUrl: 'https://github.com/agiprogrammer/tensorgate',
+    githubUrl: 'https://github.com/agiprogrammerch/tensorgate',
     isFlagship: true,
     architecture: tensorgateArchitecture,
     specifications: {
@@ -552,7 +552,7 @@ tensorgate status          # RAM usage, active modules, alert queue`,
 - No gesture recognition beyond basic pinch/fist`,
     tags: ['PYTHON', 'OPENCV', 'COMPUTER-VISION', 'HAND-TRACKING', 'LOW-LATENCY', 'CPU-ONLY'],
     icon: '🖱️',
-    githubUrl: 'https://github.com/agiprogrammer/cyber-virtual-mouse',
+    githubUrl: 'https://github.com/agiprogrammerch/cyber-virtual-mouse',
     isFlagship: false,
   },
   {
@@ -592,7 +592,7 @@ tensorgate status          # RAM usage, active modules, alert queue`,
 - Transfer sensitive files in environments where USB is restricted`,
     tags: ['PYTHON', 'AES-256-GCM', 'P2P', 'LAN', 'E2E-ENCRYPTION', 'ZERO-SERVER'],
     icon: '📡',
-    githubUrl: 'https://github.com/agiprogrammer/lan-drop',
+    githubUrl: 'https://github.com/agiprogrammerch/lan-drop',
     isFlagship: false,
   },
 ];

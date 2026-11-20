@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface TerminalLine {
   type: 'prompt' | 'output' | 'blank';
@@ -10,7 +11,8 @@ interface TerminalLine {
   className?: string;
 }
 
-const BOOT_LINES: TerminalLine[] = [
+// Pre-rendered boot lines for SSR - these are the initial lines shown before interaction
+const INITIAL_LINES: TerminalLine[] = [
   { type: 'blank' },
   { type: 'prompt', prompt: 'arush@voidmatrix:~$', text: ' cat /etc/profile.dossier' },
   { type: 'output', className: 'green', text: '═══════════════════════════════════════════════' },
@@ -161,8 +163,8 @@ const COMMANDS = {
       '  tensorgate         [DEV]     Defensive cybersecurity suite',
       '',
       'ADDITIONAL BUILDS:',
-      '  cyber-virtual-mouse  [EXP]  Webcam hand-tracking cursor',
-      '  lan-drop             [EXP]  E2E encrypted P2P file transfer',
+      '  cyber-virtual-mouse  [RELEASED]  Webcam hand-tracking cursor',
+      '  lan-drop             [DAILY DRIVER]  E2E encrypted P2P file transfer',
       '',
       'Type "inspect <name>" for details or "open <slug>" to visit project page.',
     ],
@@ -178,8 +180,8 @@ const COMMANDS = {
       '  tensorgate         [DEV]     Defensive cybersecurity suite',
       '',
       'ADDITIONAL BUILDS:',
-      '  cyber-virtual-mouse  [EXP]  Webcam hand-tracking cursor',
-      '  lan-drop             [EXP]  E2E encrypted P2P file transfer',
+      '  cyber-virtual-mouse  [RELEASED]  Webcam hand-tracking cursor',
+      '  lan-drop             [DAILY DRIVER]  E2E encrypted P2P file transfer',
       '',
       'Type "inspect <name>" for details or "open <slug>" to visit project page.',
     ],
@@ -223,7 +225,7 @@ const COMMANDS = {
     output: [
       '═══════════════════════════════════════════════',
       '  HARDWARE BENCHMARK — ASUS VIVOBOOK X515EA',
-      '═══════════════════════════════════════════════',
+      '══════════════════════════════════════════════',
       '',
       '  CPU:         Intel Core i3-1115G4',
       '               2 Cores / 4 Threads @ up to 4.10 GHz',
@@ -308,7 +310,7 @@ const COMMANDS = {
       '     • tensorgate — Defensive cybersecurity suite (WIP)',
       '  🔧 All projects: $0 paid APIs, zero cloud, <1GB RAM, deterministic',
       '',
-      '═══════════════════════════════════════════════',
+      '════════════════════════════════════════════════',
     ],
   },
   contact: {
@@ -319,7 +321,7 @@ const COMMANDS = {
       '  CONTACT',
       '═══════════════════════════════════════════════',
       '',
-      '  GitHub:  https://github.com/agiprogrammer',
+      '  GitHub:  https://github.com/agiprogrammerch',
       '  Email:   agiprogrammer@gmail.com',
       '',
       '  (Click links in footer to copy email)',
@@ -397,14 +399,14 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/echobaud',
+    '  GitHub: https://github.com/agiprogrammerch/echobaud',
     '',
     '═══════════════════════════════════════════════',
   ],
   phaseveil: [
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '  PROJECT: PHASEVEIL',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '',
     '  Covert-channel · audio-spectrum steganography ·',
     '  statistical steganalysis engine. Research-grade,',
@@ -413,7 +415,7 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '  ─── THREE CAPABILITIES ───',
     '',
     '  1. AUDIO PHASE STEGANOGRAPHY:',
-    '     Hide AES-256-GCM payloads in phase spectrum of 16-bit PCM WAV.',
+    '     Hide AES-256-GCM payloads in the phase spectrum of 16-bit PCM WAV.',
     '     8-PSK on mid-band bins (1000–6000 Hz), K=4 delta-preserving chunks.',
     '     SNR 33–35 dB, PSNR 44–46 dB, ~180 B/s capacity.',
     '',
@@ -434,7 +436,7 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '  Embedding Band:    1000–6000 Hz',
     '  Constellation:     M=8 (3 bits/bin, 3× energy efficiency vs 2-PSK)',
     '  Chunk K:           4 segments',
-    '  Bin Window:        [0.3,1.0]×band median, 3% dead-band',
+    '  Bin Window:        [0.3,1.0]×median, 3% dead-band',
     '  Boundary Ladder:   7 multipliers, 0.2% stability margin',
     '  Reliability Floor: max(1%, 20×σ_q) — erasures only where phase lost',
     '  FEC:               RS(255,191), nsym=64 (32 errors/64 erasures)',
@@ -465,14 +467,14 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/phaseveil',
+    '  GitHub: https://github.com/agiprogrammerch/phaseveil',
     '',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
   ],
   'osint-center': [
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '  PROJECT: OSINT CENTER (VOID//MATRIX v4)',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '',
     '  Browser-based OSINT dashboard: live aircraft, earthquakes,',
     '  disasters, conflict zones, maritime traffic, attack telemetry,',
@@ -523,18 +525,18 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  cd "OSINT Center"',
     '  python3 serve.py        # http://127.0.0.1:8000',
-    '  Login: agiprogrammer / Hacker@11 (themed client-side gate)',
+    '  Login: [YOUR_GITHUB_USERNAME] / Hacker@11 (themed client-side gate)',
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/osint-center',
+    '  GitHub: https://github.com/agiprogrammerch/osint-center',
     '',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
   ],
   tensorgate: [
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '  PROJECT: TENSORGATE',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '',
     '  Modular Defensive Cybersecurity, Digital Forensics &',
     '  Authorized Vulnerability Assessment Suite.',
@@ -579,15 +581,15 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/tensorgate',
+    '  GitHub: https://github.com/agiprogrammerch/tensorgate',
     '  Status: Active Development — Public v1.0 Targeting Mid-2027',
     '',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
   ],
   'cyber-virtual-mouse': [
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '  PROJECT: CYBER VIRTUAL MOUSE',
-    '═══════════════════════════════════════════════',
+    '══════════════════════════════════════════════',
     '',
     '  CPU-efficient webcam hand-tracking cursor controller',
     '  optimized for low-end integrated laptop webcams.',
@@ -623,15 +625,15 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/cyber-virtual-mouse',
+    '  GitHub: https://github.com/agiprogrammerch/cyber-virtual-mouse',
     '  Status: Experimental Research Prototype',
     '',
-    '═══════════════════════════════════════════════',
+    '═════════════════════════════════════════════',
   ],
   'lan-drop': [
-    '═══════════════════════════════════════════════',
+    '═════════════════════════════════════════════',
     '  PROJECT: ENCRYPTED LAN DROP',
-    '═══════════════════════════════════════════════',
+    '═════════════════════════════════════════════',
     '',
     '  Zero-server E2E encrypted P2P file transfer over local Wi-Fi.',
     '  No central server, no internet, no accounts.',
@@ -669,10 +671,10 @@ const PROJECT_SPECS: Record<string, string[]> = {
     '',
     '  ─── REPOSITORY ───',
     '',
-    '  GitHub: https://github.com/agiprogrammer/lan-drop',
+    '  GitHub: https://github.com/[YOUR_GITHUB_USERNAME]/lan-drop',
     '  Status: Experimental Research Prototype',
     '',
-    '═══════════════════════════════════════════════',
+    '═════════════════════════════════════════════',
   ],
 };
 
@@ -689,14 +691,13 @@ const QUICK_COMMANDS = [
 ];
 
 export default function Hero() {
+  const router = useRouter();
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [lines, setLines] = useState<TerminalLine[]>([]);
+  const [lines, setLines] = useState<TerminalLine[]>(INITIAL_LINES);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [inputValue, setInputValue] = useState('');
-  const [isBooting, setIsBooting] = useState(true);
-  const [bootLineIndex, setBootLineIndex] = useState(0);
 
   const scrollToBottom = useCallback(() => {
     if (terminalRef.current) {
@@ -707,22 +708,6 @@ export default function Hero() {
   useEffect(() => {
     scrollToBottom();
   }, [lines, scrollToBottom]);
-
-  useEffect(() => {
-    if (!isBooting) return;
-
-    const bootInterval = setInterval(() => {
-      if (bootLineIndex < BOOT_LINES.length) {
-        setLines((prev) => [...prev, BOOT_LINES[bootLineIndex]]);
-        setBootLineIndex((prev) => prev + 1);
-      } else {
-        setIsBooting(false);
-        clearInterval(bootInterval);
-      }
-    }, 30);
-
-    return () => clearInterval(bootInterval);
-  }, [isBooting, bootLineIndex]);
 
   const executeCommand = useCallback((cmd: string) => {
     const trimmed = cmd.trim();
@@ -778,7 +763,7 @@ export default function Hero() {
       if (PROJECT_SPECS[slug]) {
         output = [{ type: 'output', className: 'green', text: `Opening /projects/${slug}...` }];
         // Navigate using Next.js router
-        window.location.href = `/projects/${slug}`;
+        router.push(`/projects/${slug}`);
         return;
       } else {
         output = [{ type: 'output', className: 'error', text: `bash: open: '${slug}': no such project — type 'ls' for available projects` }];
@@ -825,7 +810,7 @@ export default function Hero() {
     } else {
       setLines((prev) => [...prev, { type: 'blank' }]);
     }
-  }, []);
+  }, [router]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -860,7 +845,7 @@ export default function Hero() {
         setInputValue(matches[0] + ' ');
       } else if (matches.length > 1) {
         // Show matches
-        setLines((prev) => [...prev, { type: 'output', text: matches.join('  ') }, { type: 'blank' }, { type: 'prompt', prompt: 'arush@voidmatrix:~$', text: ` ${inputValue}` }]);
+        setLines((prev) => [...prev, { type: 'output', text: matches.join('  ') }, { type: 'blank' }]);
       }
     }
   };
@@ -913,35 +898,33 @@ export default function Hero() {
                   {line.type === 'blank' && <div style={{ height: '0.5rem' }} />}
                 </div>
               ))}
-              {!isBooting && (
-                <div className="t-line">
-                  <span className="t-prompt">arush@voidmatrix:~$</span>
-                  <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', flex: 1 }}>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      className="t-cmd"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      autoComplete="off"
-                      spellCheck={false}
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        outline: 'none',
-                        color: 'var(--text)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.82rem',
-                        lineHeight: '2',
-                        flex: 1,
-                      }}
-                      aria-label="Terminal input"
-                    />
-                    <span className="t-cursor" aria-hidden="true" />
-                  </form>
-                </div>
-              )}
+              <div className="t-line">
+                <span className="t-prompt">arush@voidmatrix:~$</span>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', flex: 1 }}>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    className="t-cmd"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    autoComplete="off"
+                    spellCheck={false}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      outline: 'none',
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.82rem',
+                      lineHeight: '2',
+                      flex: 1,
+                    }}
+                    aria-label="Terminal input"
+                  />
+                  <span className="t-cursor" aria-hidden="true" />
+                </form>
+              </div>
             </div>
           </div>
           <div className="quick-commands" role="group" aria-label="Quick commands">
